@@ -3,7 +3,6 @@
 #include <string.h>
 #include <ctype.h>
 
-// Function to map spelled-out digits to their numeric counterparts
 char get_numeric_digit(char *str) {
     if (strstr(str, "one")) return '1';
     if (strstr(str, "two")) return '2';
@@ -14,11 +13,11 @@ char get_numeric_digit(char *str) {
     if (strstr(str, "seven")) return '7';
     if (strstr(str, "eight")) return '8';
     if (strstr(str, "nine")) return '9';
-    return '0'; // Default to '0' if no digit is found
+    return '0'; 
 }
 
 int main() {
-    FILE *file = fopen("input1.txt", "r");
+    FILE *file = fopen("input.txt", "r");
     if (!file) {
         perror("Unable to open file");
         return 1;

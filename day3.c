@@ -19,7 +19,6 @@ long long compute_sum(char grid[][MAX_SIZE], int rows, int cols) {
     for (r = 0; r < rows; r++) {
         for (c = 0; c < cols; c++) {
             if (isdigit(grid[r][c])) {
-                // Check surrounding characters to identify if it's surrounded by special characters
                 if ((r > 0 && is_special(grid[r - 1][c])) ||  // Above
                     (r < rows - 1 && is_special(grid[r + 1][c])) ||  // Below
                     (c > 0 && is_special(grid[r][c - 1])) ||  // Left
@@ -36,7 +35,6 @@ long long compute_sum(char grid[][MAX_SIZE], int rows, int cols) {
                 buffer[buffer_index] = '\0';
                 
             } else {
-                // Process the buffer if it's not empty
                 if (buffer[0] != '\0') {
                     if (is_special_char_found) {
                         char *end_ptr;
@@ -46,7 +44,7 @@ long long compute_sum(char grid[][MAX_SIZE], int rows, int cols) {
                     }
                     
                     buffer_index = 0;
-                    buffer[0] = '\0';  // Clear buffer
+                    buffer[0] = '\0';  
                 }
             }
         }
@@ -90,13 +88,11 @@ int main() {
         }
     }
 
-    // Handle the last row if it doesn't end with a newline
     if (col_count > 0) {
         grid[row_count][col_count] = '\n';  
         row_count++;
     }
 
-    // Calculate the sum and print it
     col_count++;
     printf("Sum is %lld\n", compute_sum(grid, row_count, col_count));
 
