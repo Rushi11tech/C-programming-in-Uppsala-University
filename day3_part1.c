@@ -19,14 +19,14 @@ long long compute_sum(char grid[][MAX_SIZE], int rows, int cols) {
     for (r = 0; r < rows; r++) {
         for (c = 0; c < cols; c++) {
             if (isdigit(grid[r][c])) {
-                if ((r > 0 && is_special(grid[r - 1][c])) ||  // Above
-                    (r < rows - 1 && is_special(grid[r + 1][c])) ||  // Below
-                    (c > 0 && is_special(grid[r][c - 1])) ||  // Left
-                    (c < cols - 1 && is_special(grid[r][c + 1])) ||  // Right
-                    (r > 0 && c > 0 && is_special(grid[r - 1][c - 1])) ||  // Top-left diagonal
-                    (r > 0 && c < cols - 1 && is_special(grid[r - 1][c + 1])) ||  // Top-right diagonal
-                    (r < rows - 1 && c > 0 && is_special(grid[r + 1][c - 1])) ||  // Bottom-left diagonal
-                    (r < rows - 1 && c < cols - 1 && is_special(grid[r + 1][c + 1])))  // Bottom-right diagonal 
+                if ((r > 0 && is_special(grid[r - 1][c])) ||  
+                    (r < rows - 1 && is_special(grid[r + 1][c])) ||  
+                    (c > 0 && is_special(grid[r][c - 1])) ||  
+                    (c < cols - 1 && is_special(grid[r][c + 1])) ||  
+                    (r > 0 && c > 0 && is_special(grid[r - 1][c - 1])) ||  
+                    (r > 0 && c < cols - 1 && is_special(grid[r - 1][c + 1])) ||  
+                    (r < rows - 1 && c > 0 && is_special(grid[r + 1][c - 1])) ||  
+                    (r < rows - 1 && c < cols - 1 && is_special(grid[r + 1][c + 1])))   
                 {  
                     is_special_char_found = 1;
                 }
@@ -69,14 +69,11 @@ int main() {
     char character;
     int row_count = 0, col_count = 0;
 
-    // Open the file
     file = fopen("input3.txt", "r");
     if (file == NULL) {
         fprintf(stderr, "Error: Could not open file.\n");
         return 1;
     }
-
-    // Read the file
     while ((character = fgetc(file)) != EOF && row_count < MAX_SIZE) {
         if (character == '\n') {
             grid[row_count][col_count] = '\n';  

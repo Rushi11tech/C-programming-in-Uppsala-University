@@ -1,2 +1,2 @@
-gcc -o outputfile advtpt2.c
+gcc -o outputfile day1_part2.c
 ./outputfile

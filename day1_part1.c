@@ -23,7 +23,7 @@ int extract_calibration_value(const char *line) {
         return 0;  // No digits found
     }
 
-    return first_digit * 10 + last_digit;  // Combine to form a two-digit number
+    return first_digit * 10 + last_digit;  // Combine to form a two digit number
 }
 
 int main() {
@@ -36,7 +36,6 @@ int main() {
     char line[100];  // Buffer for each line
     int total = 0;   // Sum of calibration values
 
-    // Read each line from the file
     while (fgets(line, sizeof(line), file)) {
         int value = extract_calibration_value(line);
         total += value;
