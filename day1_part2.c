@@ -3,84 +3,68 @@
 #include <string.h>
 #include <ctype.h>
 
-char get_numeric_digit(char *str) {
-    if (strstr(str, "one")) return '1';
-    if (strstr(str, "two")) return '2';
-    if (strstr(str, "three")) return '3';
-    if (strstr(str, "four")) return '4';
-    if (strstr(str, "five")) return '5';
-    if (strstr(str, "six")) return '6';
-    if (strstr(str, "seven")) return '7';
-    if (strstr(str, "eight")) return '8';
-    if (strstr(str, "nine")) return '9';
-    return '0'; 
+#define MAX_LINE_LENGTH 1000
+
+const char* number_words[] = {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
+const int num_number_words = 10;
+
+int find_digit(const char* str, int* index, int forward) {
+    int i = *index;
+    int len = strlen(str);
+    
+    while (i >= 0 && i < len) {
+        if (isdigit(str[i])) {
+            *index = i;
+            return str[i] - '0';
+        }
+        
+        for (int j = 0; j < num_number_words; j++) {
+            if (forward) {
+                if (strncmp(&str[i], number_words[j], strlen(number_words[j])) == 0) {
+                    *index = i;
+                    return j;
+                }
+            } else {
+                if (i >= strlen(number_words[j]) - 1 &&
+                    strncmp(&str[i - strlen(number_words[j]) + 1], number_words[j], strlen(number_words[j])) == 0) {
+                    *index = i;
+                    return j;
+                }
+            }
+        }
+        
+        i += forward ? 1 : -1;
+    }
+    
+    return -1;  // No digit found
+}
+
+int get_calibration_value(const char* line) {
+    int first_index = 0;
+    int last_index = strlen(line) - 1;
+    
+    int first_digit = find_digit(line, &first_index, 1);
+    int last_digit = find_digit(line, &last_index, 0);
+    
+    if (first_digit == -1 || last_digit == -1) {
+        return 0;  // Invalid line
+    }
+    
+    return first_digit * 10 + last_digit;
 }
 
 int main() {
-    FILE *file = fopen("input.txt", "r");
-    if (!file) {
-        perror("Unable to open file");
-        return 1;
-    }
+    char line[MAX_LINE_LENGTH];
+    int sum = 0;
 
-    char line[256];
-    int total_sum = 0;
-
-    while (fgets(line, sizeof(line), file)) {
-        char first_digit = '0', last_digit = '0';
-        int length = strlen(line);
+    while (fgets(line, sizeof(line), stdin)) {
+        // Remove newline character if present
+        line[strcspn(line, "\n")] = 0;
         
-        for (int i = 0; i < length; i++) {
-            if (isdigit(line[i])) {
-                if (first_digit == '0') first_digit = line[i];
-                last_digit = line[i];
-            } else if (line[i] == 'o' && line[i+1] == 'n' && line[i+2] == 'e') {
-                if (first_digit == '0') first_digit = '1';
-                last_digit = '1';
-                i += 2; // Skip past "one"
-            } else if (line[i] == 't' && line[i+1] == 'w' && line[i+2] == 'o') {
-                if (first_digit == '0') first_digit = '2';
-                last_digit = '2';
-                i += 2; // Skip past "two"
-            } else if (line[i] == 't' && line[i+1] == 'h' && line[i+2] == 'r' && line[i+3] == 'e' && line[i+4] == 'e') {
-                if (first_digit == '0') first_digit = '3';
-                last_digit = '3';
-                i += 4; // Skip past "three"
-            } else if (line[i] == 'f' && line[i+1] == 'o' && line[i+2] == 'u' && line[i+3] == 'r') {
-                if (first_digit == '0') first_digit = '4';
-                last_digit = '4';
-                i += 3; // Skip past "four"
-            } else if (line[i] == 'f' && line[i+1] == 'i' && line[i+2] == 'v' && line[i+3] == 'e') {
-                if (first_digit == '0') first_digit = '5';
-                last_digit = '5';
-                i += 3; // Skip past "five"
-            } else if (line[i] == 's' && line[i+1] == 'i' && line[i+2] == 'x') {
-                if (first_digit == '0') first_digit = '6';
-                last_digit = '6';
-                i += 2; // Skip past "six"
-            } else if (line[i] == 's' && line[i+1] == 'e' && line[i+2] == 'v' && line[i+3] == 'e' && line[i+4] == 'n') {
-                if (first_digit == '0') first_digit = '7';
-                last_digit = '7';
-                i += 4; // Skip past "seven"
-            } else if (line[i] == 'e' && line[i+1] == 'i' && line[i+2] == 'g' && line[i+3] == 'h' && line[i+4] == 't') {
-                if (first_digit == '0') first_digit = '8';
-                last_digit = '8';
-                i += 4; // Skip past "eight"
-            } else if (line[i] == 'n' && line[i+1] == 'i' && line[i+2] == 'n' && line[i+3] == 'e') {
-                if (first_digit == '0') first_digit = '9';
-                last_digit = '9';
-                i += 3; // Skip past "nine"
-            }
-        }
-
-        if (first_digit != '0' && last_digit != '0') {
-            int calibration_value = (first_digit - '0') * 10 + (last_digit - '0');
-            total_sum += calibration_value;
-        }
+        int value = get_calibration_value(line);
+        sum += value;
     }
 
-    fclose(file);
-    printf("Total sum of calibration values: %d\n", total_sum);
-
+    printf("Sum of all calibration values: %d\n", sum);
     return 0;
 }
