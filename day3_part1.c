@@ -69,7 +69,7 @@ int main() {
     char character;
     int row_count = 0, col_count = 0;
 
-    file = fopen("input3.txt", "r");
+    file = fopen("3input.txt", "r");
     if (file == NULL) {
         fprintf(stderr, "Error: Could not open file.\n");
         return 1;

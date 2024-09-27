@@ -27,7 +27,7 @@ int extract_calibration_value(const char *line) {
 }
 
 int main() {
-    FILE *file = fopen("input1.txt", "r");
+    FILE *file = fopen("1input.txt", "r");
     if (file == NULL) {
         printf("Error: Could not open file\n");
         return 1;
